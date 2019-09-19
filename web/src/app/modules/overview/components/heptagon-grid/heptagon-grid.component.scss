@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 svg {
   width: 100%;
   height: auto;
@@ -15,7 +17,7 @@ g.tooltip {
   transition: opacity 0.3s;
 
   rect {
-    fill: lightblue;
-    stroke: gray;
+    fill: $heptagon-grid-tooltip-color;
+    stroke: $heptagon-grid-tooltip-border-color;
   }
 }

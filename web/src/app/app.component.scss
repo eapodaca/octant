@@ -2,7 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-$navigation-width: 13rem;
+@import 'src/sass/variables';
+@import 'src/sass/mixins';
 
 .main-container {
   .header {
@@ -35,7 +36,7 @@ $navigation-width: 13rem;
 
   .content-container {
     .navigation {
-      border-right: 1px solid rgb(215, 215, 215);
+      border-right: 1px solid $border-color;
       overflow-y: auto;
       min-width: 2rem;
       width: $navigation-width;

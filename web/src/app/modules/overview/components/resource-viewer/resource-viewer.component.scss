@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 .resourceViewer {
   .view-container {
     height: 100vh;
@@ -15,44 +17,44 @@
     height: 100vh;
     width: 100%;
     padding: 1rem;
-    background-color: #eeeeee;
+    background-color: $resource-viewer-status-container-bachground-color;
   }
 
   .node {
     cursor: pointer;
-    fill: white;
+    fill:$resource-viewer-node-color;
 
     .label {
-      fill: black;
+      fill: $resource-viewer-node-label-color;
     }
 
     &.selected {
-      stroke: #003d79;
+      stroke: $resource-viewer-node-selected-color;
       stroke-width: 2.5px;
     }
 
     &-ok {
       rect {
-        fill: #60b515;
+        fill: $resource-viewer-node-ok-color;
       }
     }
 
     &-warning {
       rect {
-        fill: #f57600;
+        fill: $resource-viewer-node-warning-color;
       }
     }
 
     &-error {
       rect {
-        fill: #e12200;
+        fill: $resource-viewer-node-error-color;
       }
     }
   }
 
   .edgePath {
     path.path {
-      stroke: #003d79;
+      stroke: $resource-viewer-edge-path-color;
       stroke-width: 1.5px;
     }
   }
@@ -62,21 +64,21 @@
   }
 
   .resource {
-    background-color: #fff;
-    border: 1px solid black;
+    background-color: $resource-viewer-resource-background-color;
+    border: 1px solid $resource-viewer-resource-border-color;
     padding: 25px 40px;
     position: relative;
   }
 
   .resource-name {
-    color: #fff;
+    color: $resource-viewer-resource-name-color;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 10px;
   }
 
   .resource-type {
-    color: white;
+    color: $resource-viewer-resource-type-color;
     font-size: 14px;
     font-weight: 200;
   }
@@ -87,6 +89,6 @@
     left: 0;
     position: absolute;
     width: 100%;
-    background-color: #eeeeee;
+    background-color: $resource-viewer-resource-status-background-color;
   }
 }

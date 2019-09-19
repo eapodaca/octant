@@ -2,7 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@import 'src/styles.scss';
+@import 'src/sass/variables';
+@import 'src/sass/mixins';
 
 .view-labels {
   display: flex;

@@ -2,6 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 .app-logs {
   .log-actions,
   .container-select {
@@ -9,12 +11,12 @@
   }
 
   .container-logs {
-    border: 1px solid #ccc;
+    border: 1px solid $container-logs-border-color;
     border-radius: 4px;
-    background-color: black;
+    background-color: $container-logs-background-color;
 
     &-bg {
-      color: white;
+      color: $container-logs-bg-color;
       padding: 4px 8px;
       min-height: 20vh;
       max-height: calc(100vh - 325px);
@@ -24,19 +26,19 @@
     .container-log {
       font-family: 'Consolas', 'Menlo', monospace;
       font-size: 12px;
-      color: white;
+      color: $container-log-color;
       display: flex;
       flex-direction: row;
 
       &-timestamp {
         min-width: 280px;
         width: 280px;
-        color: #a9b6be;
+        color: $container-log-timestamp-color;
       }
 
       &-message {
         flex: 1;
-        color: #fafafa;
+        color: $container-log-message-color;
         word-wrap: break-word;
         min-width: 100px;
       }

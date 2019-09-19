@@ -2,8 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@import 'src/styles.scss';
+@import 'src/sass/variables';
+@import 'src/sass/mixins';
 
 .selector--expression {
-  @include pill($selector-color);
+  @include pill($selector-expression-selector-color);
 }

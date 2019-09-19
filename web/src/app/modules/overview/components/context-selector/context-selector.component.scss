@@ -2,9 +2,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 .dropdown > .dropdown-toggle {
   line-height: 2.5rem;
-  color: #fafafa;
+  color: $dropdown-toggle-color;
   opacity: 0.65;
   outline: none;
 

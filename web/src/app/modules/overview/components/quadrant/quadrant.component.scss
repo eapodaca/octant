@@ -2,7 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-$border: 1px solid rgba(173, 187, 196, 0.3);
+@import 'src/sass/variables';
+
+$border: 1px solid $quadrant-border-color;
 
 .quadrant {
   border: $border;

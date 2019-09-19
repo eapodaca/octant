@@ -2,14 +2,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 rect {
-  fill: #000000;
+  fill: $heptagon-label-border-color;
   z-index: 15;
 }
 
 text {
   z-index: 15;
-  fill: #ffffff;
+  fill: $heptagon-label-color;
 
   font-size: 14px;
 }

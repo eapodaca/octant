@@ -2,41 +2,43 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@import 'src/sass/variables';
+
 .heptagon {
   stroke-width: 1px;
-  fill: orange;
+  fill: $heptagon-color;
   cursor: pointer;
   z-index: 5;
 }
 
 .status-ok {
-  fill: #60b515;
+  fill: $heptagon-ok-color;
 }
 
 .status-ok:hover {
-  fill: #1d5100;
+  fill: $heptagon-ok-hover-color;
 }
 
 .status-warning {
-  fill: #f57600;
+  fill: $heptagon-warning-color;
 }
 
 .status-warning:hover {
-  fill: #c47d00;
+  fill: $heptagon-warning-hover-color;
 }
 
 .status-error {
-  fill: #e12200;
+  fill: $heptagon-error-color;
 }
 
 .status-error:hover {
-  fill: #a32100;
+  fill: $heptagon-error-hover-color;
 }
 
 .status-invalid {
-  fill: #9a9a9a;
+  fill: $heptagon-invalid-color;
 }
 
 .status-invalid:hover {
-  fill: #313131;
+  fill: $heptagon-invalid-hover-color;
 }

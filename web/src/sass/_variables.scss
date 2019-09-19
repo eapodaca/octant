@@ -2,5 +2,75 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// @import 'src/sass/variables';
+// @import 'src/sass/mixins';
+
 $label-color: #0065ab;
 $selector-color: #00968b;
+
+$ok-color: #60b515;
+$warning-color: #f57600;
+$error-color: #e12200;
+
+$light-gray: #ccc;
+
+$border-color: rgb(215, 215, 215);
+$navigation-width: 13rem;
+
+
+$input-filter-label-color: $label-color;
+$input-filter-text-input-color:  #fff;
+$input-filter-tags-background: #fff;
+$input-filter-tags-borders: $light-gray;
+$input-filter-tags-shadow-color: rgba(115, 115, 115, 0.25);
+$input-filter-tags-clear-color: #0079b8;
+
+$dropdown-toggle-color: #fafafa;
+
+$selector-expression-selector-color: $selector-color;
+
+$filter-label-color: $label-color;
+
+$graphviz-node-color: #333;
+$graphviz-label-color: #fff;
+
+$heptagon-color: orange;
+$heptagon-ok-color: $ok-color;
+$heptagon-ok-hover-color: #1d5100;
+$heptagon-warning-color: $warning-color;
+$heptagon-warning-hover-color: #c47d00;
+$heptagon-error-color: $error-color;
+$heptagon-error-hover-color: #a32100;
+$heptagon-invalid-color: #9a9a9a;
+$heptagon-invalid-hover-color: #313131;
+
+$heptagon-grid-tooltip-color: lightblue;
+$heptagon-grid-tooltip-border-color: gray;
+
+$heptagon-label-color: #fff;
+$heptagon-label-border-color: #000;
+
+$label-selector-color: $selector-color;
+
+$container-logs-border-color: $light-gray;
+$container-logs-background-color: #000;
+$container-logs-bg-color: #fff;
+$container-log-color: #fff;
+$container-log-timestamp-color: #a9b6be;
+$container-log-message-color: #fafafa;
+
+$quadrant-border-color: rgba(173, 187, 196, 0.3);
+
+$resource-viewer-status-container-bachground-color: #eee;
+$resource-viewer-node-color: #fff;
+$resource-viewer-node-label-color: #000;
+$resource-viewer-node-selected-color: #003d79;
+$resource-viewer-node-ok-color: $ok-color;
+$resource-viewer-node-warning-color: $warning-color;
+$resource-viewer-node-error-color: $error-color;
+$resource-viewer-edge-path-color: #003d79;
+$resource-viewer-resource-background-color: #fff;
+$resource-viewer-resource-border-color: #000;
+$resource-viewer-resource-name-color: #fff;
+$resource-viewer-resource-type-color: #fff;
+$resource-viewer-resource-status-background-color: #eee;
