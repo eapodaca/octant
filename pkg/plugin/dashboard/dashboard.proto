@@ -87,6 +87,37 @@ message WatchRequest {
     bytes object = 2;
 }
 
+/*
+	GetResources(ctx context.Context) ([]WebResource, error)
+	GetResourcesByType(ctx context.Context, mimeType string) ([]WebResource, error)
+	GetResource(ctx context.Context, path string) ([]byte, error)
+*/
+
+message WebResource {
+    string Path = 1;
+    string MimeType = 2;
+}
+
+message ResourcesRequest {
+
+}
+
+message ResourceByTypeRequest {
+    string mimeType = 1;
+}
+
+message ResourceRequest {
+    string path = 1;
+}
+
+message ResourcesResponce {
+    repeated WebResource webResourcs = 1;
+}
+
+message ResourceResponce {
+    bytes content = 1;
+}
+
 service Plugin {
     rpc Content(ContentRequest) returns (ContentResponse);
     rpc HandleAction(HandleActionRequest) returns (HandleActionResponse);
@@ -98,4 +129,7 @@ service Plugin {
     rpc WatchAdd(WatchRequest) returns (Empty);
     rpc WatchUpdate(WatchRequest) returns (Empty);
     rpc WatchDelete(WatchRequest) returns (Empty);
+    rpc GetResources(ResourcesRequest) returns (ResourcesResponce);
+    rpc GetResourcesByType(ResourceByTypeRequest) returns (ResourcesResponce);
+    rpc GetResource(ResourceRequest) returns (ResourceResponce);
 }

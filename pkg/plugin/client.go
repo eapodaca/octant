@@ -83,6 +83,12 @@ type Metadata struct {
 	Capabilities Capabilities
 }
 
+// WebResource represents a web resource
+type WebResource struct {
+	Path     string
+	MimeType string
+}
+
 // Service is the interface that is exposed as a plugin. The plugin is required to implement this
 // interface.
 type Service interface {
@@ -91,6 +97,9 @@ type Service interface {
 	PrintTab(ctx context.Context, object runtime.Object) (TabResponse, error)
 	ObjectStatus(ctx context.Context, object runtime.Object) (ObjectStatusResponse, error)
 	HandleAction(ctx context.Context, payload action.Payload) error
+	GetResources(ctx context.Context) ([]WebResource, error)
+	GetResourcesByType(ctx context.Context, mimeType string) ([]WebResource, error)
+	GetResource(ctx context.Context, path string) ([]byte, error)
 }
 
 // ModuleService is the interface that is exposed as a plugin as a module. The plugin is required to implement this

@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
+	"mime"
+	"path/filepath"
 	"sync"
 
 	"github.com/pkg/errors"
@@ -26,6 +29,13 @@ type Handler struct {
 	dashboardFactory func(dashboardAPIAddress string) (Dashboard, error)
 	dashboardClient  Dashboard
 	router           *Router
+
+	webResources []webResourceContent
+}
+
+type webResourceContent struct {
+	plugin.WebResource
+	content []byte
 }
 
 var _ plugin.Service = (*Handler)(nil)
@@ -146,4 +156,55 @@ func (p *Handler) Content(ctx context.Context, contentPath string) (component.Co
 	}
 
 	return handlerFunc(request)
+}
+
+// AddAsset adds a web asset to the plugin
+func (p *Handler) AddAsset(path string, content []byte) error {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	if p.webResources == nil {
+		p.webResources = make([]webResourceContent, 1)
+	}
+
+	resource := webResourceContent{
+		content: content,
+		WebResource: plugin.WebResource{
+			Path:     path,
+			MimeType: mime.TypeByExtension(filepath.Ext(path)),
+		},
+	}
+	p.webResources = append(p.webResources, resource)
+
+	return nil
+}
+
+// GetResources Return list of available resoures
+func (p *Handler) GetResources(ctx context.Context) ([]plugin.WebResource, error) {
+	resp := make([]plugin.WebResource, len(p.webResources))
+	for _, resource := range p.webResources {
+		resp = append(resp, resource.WebResource)
+	}
+	return resp, nil
+}
+
+// GetResourcesByType Return list of available resoures with a specific mime type
+func (p *Handler) GetResourcesByType(ctx context.Context, mimeType string) ([]plugin.WebResource, error) {
+	resp := make([]plugin.WebResource, len(p.webResources))
+	for _, resource := range p.webResources {
+		if resource.WebResource.MimeType == mimeType {
+			resp = append(resp, resource.WebResource)
+		}
+	}
+	return resp, nil
+}
+
+// GetResource Get the resource of the path specified
+func (p *Handler) GetResource(ctx context.Context, path string) ([]byte, error) {
+	for _, resource := range p.webResources {
+		if resource.WebResource.Path == path {
+			return resource.content, nil
+		}
+	}
+	return nil, fmt.Errorf("File path not found in plugin: %s", path)
 }

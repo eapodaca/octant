@@ -295,6 +295,56 @@ func (c *GRPCClient) PrintTab(ctx context.Context, object runtime.Object) (TabRe
 	return TabResponse{Tab: &tab}, nil
 }
 
+// GetResources Return list of available resoures
+func (c *GRPCClient) GetResources(ctx context.Context) ([]WebResource, error) {
+	in := dashboard.ResourcesRequest{}
+	resp, err := c.client.GetResources(ctx, &in)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]WebResource, len(resp.WebResourcs))
+	for _, res := range resp.WebResourcs {
+		newRes := WebResource{
+			Path:     res.Path,
+			MimeType: res.MimeType,
+		}
+		result = append(result, newRes)
+	}
+	return result, nil
+}
+
+// GetResourcesByType Get the resources that match the mime type
+func (c *GRPCClient) GetResourcesByType(ctx context.Context, mimeType string) ([]WebResource, error) {
+	in := dashboard.ResourceByTypeRequest{
+		MimeType: mimeType,
+	}
+	resp, err := c.client.GetResourcesByType(ctx, &in)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]WebResource, len(resp.WebResourcs))
+	for _, res := range resp.WebResourcs {
+		newRes := WebResource{
+			Path:     res.Path,
+			MimeType: res.MimeType,
+		}
+		result = append(result, newRes)
+	}
+	return result, nil
+}
+
+// GetResource Get the resource of the path specified
+func (c *GRPCClient) GetResource(ctx context.Context, path string) ([]byte, error) {
+	in := dashboard.ResourceRequest{
+		Path: path,
+	}
+	resp, err := c.client.GetResource(ctx, &in)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Content, nil
+}
+
 // GRPCServer is the grpc server the dashboard will use to communicate with the
 // the plugin.
 type GRPCServer struct {
@@ -490,4 +540,60 @@ func (s *GRPCServer) WatchUpdate(context.Context, *dashboard.WatchRequest) (*das
 // WatchDelete is called when a watched GVK has an object deleted.
 func (s *GRPCServer) WatchDelete(context.Context, *dashboard.WatchRequest) (*dashboard.Empty, error) {
 	panic("not implemented")
+}
+
+// GetResources Return list of available resoures
+func (s *GRPCServer) GetResources(ctx context.Context, req *dashboard.ResourcesRequest) (*dashboard.ResourcesResponce, error) {
+	res, err := s.Impl.GetResources(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	result := dashboard.ResourcesResponce{
+		WebResourcs: make([]*dashboard.WebResource, len(res)),
+	}
+	for _, resource := range res {
+		newResource := dashboard.WebResource{
+			Path:     resource.Path,
+			MimeType: resource.MimeType,
+		}
+		result.WebResourcs = append(result.WebResourcs, &newResource)
+	}
+	return &result, nil
+}
+
+// GetResourcesByType Return list of available resoures of type
+func (s *GRPCServer) GetResourcesByType(ctx context.Context, req *dashboard.ResourceByTypeRequest) (*dashboard.ResourcesResponce, error) {
+	res, err := s.Impl.GetResourcesByType(ctx, req.MimeType)
+	if err != nil {
+		return nil, err
+	}
+
+	result := dashboard.ResourcesResponce{
+		WebResourcs: make([]*dashboard.WebResource, len(res)),
+	}
+	for _, resource := range res {
+		newResource := dashboard.WebResource{
+			Path:     resource.Path,
+			MimeType: resource.MimeType,
+		}
+		result.WebResourcs = append(result.WebResourcs, &newResource)
+	}
+	return &result, nil
+}
+
+// GetResource Get the resource of the path specified
+// func (s *GRPCServer) GetResource(ctx context.Context, path string) ([]byte, error) {
+// 	return s.Impl.GetResource(ctx, path)
+// }
+func (s *GRPCServer) GetResource(ctx context.Context, req *dashboard.ResourceRequest) (*dashboard.ResourceResponce, error) {
+	res, err := s.Impl.GetResource(ctx, req.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	result := dashboard.ResourceResponce{
+		Content: res,
+	}
+	return &result, nil
 }
