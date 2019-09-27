@@ -76,7 +76,7 @@ func NewContentManager(moduleManager module.ManagerInterface, logger log.Logger,
 var _ StateManager = (*ContentManager)(nil)
 
 // Start starts the manager.
-func (cm *ContentManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (cm *ContentManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 	defer func() {
 		close(cm.updateContentCh)
 	}()
@@ -89,7 +89,7 @@ func (cm *ContentManager) Start(ctx context.Context, state octant.State, s Octan
 	cm.poller.Run(ctx, cm.updateContentCh, cm.runUpdate(state, s), event.DefaultScheduleDelay)
 }
 
-func (cm *ContentManager) runUpdate(state octant.State, s OctantClient) PollerFunc {
+func (cm *ContentManager) runUpdate(state octant.State, s octant.OctantClient) PollerFunc {
 	return func(ctx context.Context) bool {
 		contentPath := state.GetContentPath()
 		if contentPath == "" {
@@ -175,7 +175,7 @@ func (cm *ContentManager) SetQueryParams(state octant.State, payload action.Payl
 }
 
 // SetNamespace sets the current namespace.
-func (cm *ContentManager) SetNamespace(state octant.State, payload action.Payload) error {
+func (cm *ContentManager) SetNamespace(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	namespace, err := payload.String("namespace")
 	if err != nil {
 		return errors.Wrap(err, "extract namespace from payload")
@@ -185,7 +185,7 @@ func (cm *ContentManager) SetNamespace(state octant.State, payload action.Payloa
 }
 
 // SetContentPath sets the current content path.
-func (cm *ContentManager) SetContentPath(state octant.State, payload action.Payload) error {
+func (cm *ContentManager) SetContentPath(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	contentPath, err := payload.String("contentPath")
 	if err != nil {
 		return errors.Wrap(err, "extract contentPath from payload")
@@ -199,13 +199,20 @@ func (cm *ContentManager) SetContentPath(state octant.State, payload action.Payl
 }
 
 // RequestPluginWebResources will tell the client about web resources that plugins provide
-func (cm *ContentManager) RequestPluginWebResources(state octant.State, payload action.Payload) error {
+func (cm *ContentManager) RequestPluginWebResources(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	// TODO ask all the plugins and write a repsonce back
 	resources := make([]string, 1)
 	resources = append(resources, "/some/res.css")
-	pp := action.Payload{}
-	pp["resources"] = resources
-	state.Dispatch(nil, RequestPluginWebResources, pp)
+
+	ev := octant.Event{
+		Type: RequestPluginWebResources,
+		Data: map[string]interface{}{
+			"resources": resources,
+		},
+		Err: nil,
+	}
+
+	s.Send(ev)
 	return nil
 }
 

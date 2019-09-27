@@ -77,7 +77,7 @@ func (n NavigationManager) Handlers() []octant.ClientRequestHandler {
 }
 
 // Start starts the manager. It periodically generates navigation updates.
-func (n *NavigationManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (n *NavigationManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 	ch := make(chan struct{}, 1)
 	defer func() {
 		close(ch)
@@ -86,7 +86,7 @@ func (n *NavigationManager) Start(ctx context.Context, state octant.State, s Oct
 	n.poller.Run(ctx, ch, n.runUpdate(state, s), event.DefaultScheduleDelay)
 }
 
-func (n *NavigationManager) runUpdate(state octant.State, client OctantClient) PollerFunc {
+func (n *NavigationManager) runUpdate(state octant.State, client octant.OctantClient) PollerFunc {
 	var previous []byte
 
 	return func(ctx context.Context) bool {

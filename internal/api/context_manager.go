@@ -78,7 +78,7 @@ func (c *ContextManager) Handlers() []octant.ClientRequestHandler {
 }
 
 // SetContext sets the current context.
-func (c *ContextManager) SetContext(state octant.State, payload action.Payload) error {
+func (c *ContextManager) SetContext(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	requestedContext, err := payload.String("requestedContext")
 	if err != nil {
 		return errors.Wrap(err, "extract requested context from payload")
@@ -88,11 +88,11 @@ func (c *ContextManager) SetContext(state octant.State, payload action.Payload) 
 }
 
 // Start starts the manager.
-func (c *ContextManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (c *ContextManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 	c.poller.Run(ctx, nil, c.runUpdate(state, s), event.DefaultScheduleDelay)
 }
 
-func (c *ContextManager) runUpdate(state octant.State, s OctantClient) PollerFunc {
+func (c *ContextManager) runUpdate(state octant.State, s octant.OctantClient) PollerFunc {
 	var previous []byte
 
 	logger := c.dashConfig.Logger()

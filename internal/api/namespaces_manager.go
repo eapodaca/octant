@@ -73,7 +73,7 @@ func (n NamespacesManager) Handlers() []octant.ClientRequestHandler {
 }
 
 // Start starts the manager. It periodically generates a list of namespaces.
-func (n *NamespacesManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (n *NamespacesManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 	ch := make(chan struct{}, 1)
 	defer func() {
 		close(ch)
@@ -82,7 +82,7 @@ func (n *NamespacesManager) Start(ctx context.Context, state octant.State, s Oct
 	n.poller.Run(ctx, ch, n.runUpdate(state, s), event.DefaultScheduleDelay)
 }
 
-func (n *NamespacesManager) runUpdate(state octant.State, client OctantClient) PollerFunc {
+func (n *NamespacesManager) runUpdate(state octant.State, client octant.OctantClient) PollerFunc {
 	var previous []byte
 
 	return func(ctx context.Context) bool {

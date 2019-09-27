@@ -124,7 +124,7 @@ func (co *ClusterOverview) ClientRequestHandlers() []octant.ClientRequestHandler
 		// TODO: move to overview
 		{
 			RequestType: "startPortForward",
-			Handler: func(state octant.State, payload action.Payload) error {
+			Handler: func(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 				req, err := portForwardRequestFromPayload(payload)
 				if err != nil {
 					return errors.Wrap(err, "convert payload to port forward request")
@@ -136,7 +136,7 @@ func (co *ClusterOverview) ClientRequestHandlers() []octant.ClientRequestHandler
 		},
 		{
 			RequestType: "stopPortForward",
-			Handler: func(state octant.State, payload action.Payload) error {
+			Handler: func(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 				id, err := payload.String("id")
 				if err != nil {
 					return errors.Wrap(err, "get port forward id from payload")

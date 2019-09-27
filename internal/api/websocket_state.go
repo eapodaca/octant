@@ -31,7 +31,7 @@ var (
 // StateManager manages states for WebsocketState.
 type StateManager interface {
 	Handlers() []octant.ClientRequestHandler
-	Start(ctx context.Context, state octant.State, s OctantClient)
+	Start(ctx context.Context, state octant.State, s octant.OctantClient)
 }
 
 func defaultStateManagers(clientID string, dashConfig config.Dash) []StateManager {
@@ -45,12 +45,6 @@ func defaultStateManagers(clientID string, dashConfig config.Dash) []StateManage
 		NewContextManager(dashConfig),
 		NewActionRequestManager(),
 	}
-}
-
-// OctantClient is an OctantClient.
-type OctantClient interface {
-	Send(event octant.Event)
-	ID() string
 }
 
 type atomicString struct {
@@ -92,7 +86,7 @@ func WebsocketStateManagers(managers []StateManager) WebsocketStateOption {
 // WebsocketState manages state for a websocket client.
 type WebsocketState struct {
 	dashConfig         config.Dash
-	wsClient           OctantClient
+	wsClient           octant.OctantClient
 	contentPath        *atomicString
 	namespace          *atomicString
 	filters            []octant.Filter
@@ -110,7 +104,7 @@ type WebsocketState struct {
 var _ octant.State = (*WebsocketState)(nil)
 
 // NewWebsocketState creates an instance of WebsocketState.
-func NewWebsocketState(dashConfig config.Dash, actionDispatcher ActionDispatcher, wsClient OctantClient, options ...WebsocketStateOption) *WebsocketState {
+func NewWebsocketState(dashConfig config.Dash, actionDispatcher ActionDispatcher, wsClient octant.OctantClient, options ...WebsocketStateOption) *WebsocketState {
 	defaultNamespace := dashConfig.DefaultNamespace()
 
 	w := &WebsocketState{

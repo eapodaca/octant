@@ -51,7 +51,7 @@ type WebsocketClient struct {
 	id       uuid.UUID
 }
 
-var _ OctantClient = (*WebsocketClient)(nil)
+var _ octant.OctantClient = (*WebsocketClient)(nil)
 
 // NewWebsocketClient creates an instance of WebsocketClient.
 func NewWebsocketClient(ctx context.Context, conn *websocket.Conn, dashConfig config.Dash, actionDispatcher ActionDispatcher, id uuid.UUID) *WebsocketClient {
@@ -145,7 +145,7 @@ func (c *WebsocketClient) handle(message []byte) error {
 
 	for _, handler := range handlers {
 		g.Go(func() error {
-			return handler.Handler(c.state, request.Payload)
+			return handler.Handler(c.ctx, c.state, request.Payload, c)
 		})
 	}
 

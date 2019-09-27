@@ -36,7 +36,7 @@ func NewFilterManager() *FilterManager {
 }
 
 // Start starts the manager. Current is a no-op.
-func (fm *FilterManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (fm *FilterManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 }
 
 // Handlers returns a slice of handlers.
@@ -58,7 +58,7 @@ func (fm *FilterManager) Handlers() []octant.ClientRequestHandler {
 }
 
 // AddFilter adds a filter.
-func (fm *FilterManager) AddFilter(state octant.State, payload action.Payload) error {
+func (fm *FilterManager) AddFilter(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	if filter, ok := FilterFromPayload(payload); ok {
 		state.AddFilter(filter)
 		message := fmt.Sprintf("Added filter for label %s", filter.String())
@@ -69,7 +69,7 @@ func (fm *FilterManager) AddFilter(state octant.State, payload action.Payload) e
 }
 
 // ClearFilters clears all filters.
-func (fm *FilterManager) ClearFilters(state octant.State, payload action.Payload) error {
+func (fm *FilterManager) ClearFilters(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	state.SetFilters([]octant.Filter{})
 	message := "Cleared filters"
 	state.SendAlert(action.CreateAlert(action.AlertTypeInfo, message, action.DefaultAlertExpiration))
@@ -77,7 +77,7 @@ func (fm *FilterManager) ClearFilters(state octant.State, payload action.Payload
 }
 
 // RemoveFilters removes a filter.
-func (fm *FilterManager) RemoveFilter(state octant.State, payload action.Payload) error {
+func (fm *FilterManager) RemoveFilter(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 	if filter, ok := FilterFromPayload(payload); ok {
 		state.RemoveFilter(filter)
 		message := fmt.Sprintf("Removed filter for label %s", filter.String())

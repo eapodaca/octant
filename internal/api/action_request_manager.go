@@ -28,7 +28,7 @@ func NewActionRequestManager() *ActionRequestManager {
 	return &ActionRequestManager{}
 }
 
-func (a ActionRequestManager) Start(ctx context.Context, state octant.State, s OctantClient) {
+func (a ActionRequestManager) Start(ctx context.Context, state octant.State, s octant.OctantClient) {
 }
 
 // Handlers returns the handlers this manager supports.
@@ -42,8 +42,7 @@ func (a *ActionRequestManager) Handlers() []octant.ClientRequestHandler {
 }
 
 // PerformAction is a handler than runs an action.
-func (a *ActionRequestManager) PerformAction(state octant.State, payload action.Payload) error {
-	ctx := context.TODO()
+func (a *ActionRequestManager) PerformAction(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
 
 	actionName, err := payload.String("action")
 	if err != nil {
