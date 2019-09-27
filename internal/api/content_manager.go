@@ -200,14 +200,16 @@ func (cm *ContentManager) SetContentPath(ctx context.Context, state octant.State
 
 // RequestPluginWebResources will tell the client about web resources that plugins provide
 func (cm *ContentManager) RequestPluginWebResources(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
-	// TODO ask all the plugins and write a repsonce back
-	resources := make([]string, 1)
-	resources = append(resources, "/some/res.css")
+	css := state.ListPluginResources(ctx, "text/css")
+	js := state.ListPluginResources(ctx, "application/js")
 
 	ev := octant.Event{
 		Type: RequestPluginWebResources,
 		Data: map[string]interface{}{
-			"resources": resources,
+			"resources": map[string]interface{}{
+				"css": css,
+				"js":  js,
+			},
 		},
 	}
 

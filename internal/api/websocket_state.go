@@ -352,6 +352,20 @@ func (c *WebsocketState) SendAlert(alert action.Alert) {
 	c.wsClient.Send(CreateAlertUpdate(alert))
 }
 
+func (c *WebsocketState) ListPluginResources(ctx context.Context, mimeType string) []string {
+	pm := c.dashConfig.PluginManager()
+	resources, err := pm.PluginWebResourcesByType(ctx, mimeType)
+	if err != nil {
+		return make([]string, 0)
+	}
+	result := make([]string, len(resources))
+	for _, resource := range resources {
+		path := fmt.Sprintf("/api/assets/plugin/%s/path/%s", resource.PluginName, resource.Path)
+		result = append(result, path)
+	}
+	return result
+}
+
 func updateContentPathNamespace(in, namespace string) string {
 	parts := strings.Split(in, "/")
 	if in == "" {

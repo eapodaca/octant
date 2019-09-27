@@ -49,6 +49,8 @@ type State interface {
 	Dispatch(ctx context.Context, actionName string, payload action.Payload) error
 	// SendAlert sends an alert.
 	SendAlert(alert action.Alert)
+
+	ListPluginResources(ctx context.Context, mimeType string) []string
 }
 
 // ContentPathUpdateFunc is a function that is called when content path is updated.
