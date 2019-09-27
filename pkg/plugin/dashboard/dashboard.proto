@@ -115,7 +115,8 @@ message ResourcesResponce {
 }
 
 message ResourceResponce {
-    bytes content = 1;
+    WebResource webResource = 1;
+    bytes Content = 2;
 }
 
 service Plugin {

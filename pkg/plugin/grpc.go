@@ -334,7 +334,7 @@ func (c *GRPCClient) GetResourcesByType(ctx context.Context, mimeType string) ([
 }
 
 // GetResource Get the resource of the path specified
-func (c *GRPCClient) GetResource(ctx context.Context, path string) ([]byte, error) {
+func (c *GRPCClient) GetResource(ctx context.Context, path string) (*WebResourceContent, error) {
 	in := dashboard.ResourceRequest{
 		Path: path,
 	}
@@ -342,7 +342,14 @@ func (c *GRPCClient) GetResource(ctx context.Context, path string) ([]byte, erro
 	if err != nil {
 		return nil, err
 	}
-	return resp.Content, nil
+	result := WebResourceContent{
+		WebResource: WebResource{
+			Path:     resp.WebResource.Path,
+			MimeType: resp.WebResource.MimeType,
+		},
+		Content: resp.Content,
+	}
+	return &result, nil
 }
 
 // GRPCServer is the grpc server the dashboard will use to communicate with the
@@ -593,7 +600,11 @@ func (s *GRPCServer) GetResource(ctx context.Context, req *dashboard.ResourceReq
 	}
 
 	result := dashboard.ResourceResponce{
-		Content: res,
+		WebResource: &dashboard.WebResource{
+			Path:     res.Path,
+			MimeType: res.MimeType,
+		},
+		Content: res.Content,
 	}
 	return &result, nil
 }

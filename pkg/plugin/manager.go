@@ -186,6 +186,10 @@ type ManagerInterface interface {
 
 	// ObjectStatus returns the object status
 	ObjectStatus(ctx context.Context, object runtime.Object) (*ObjectStatusResponse, error)
+
+	PluginWebResources(ctx context.Context) ([]PluginWebResource, error)
+	PluginWebResourcesByType(ctx context.Context, mimeType string) ([]PluginWebResource, error)
+	PluginWebResource(ctx context.Context, clientName string, path string) (*WebResourceContent, error)
 }
 
 // ModuleRegistrar is a module registrar.
@@ -270,6 +274,64 @@ func (m *Manager) Load(cmd string) error {
 	m.configs = append(m.configs, c)
 
 	return nil
+}
+
+type PluginWebResource struct {
+	WebResource
+	PluginName string
+}
+
+// PluginWebResources get list of web plugins
+func (m *Manager) PluginWebResources(ctx context.Context) ([]PluginWebResource, error) {
+	result := make([]PluginWebResource, 1)
+	for _, clientName := range m.store.ClientNames() {
+		service, err := m.store.GetService(clientName)
+		if err == nil {
+			continue
+		}
+		resources, err := service.GetResources(ctx)
+		if err != nil {
+			continue
+		}
+		for _, resource := range resources {
+			result = append(result, PluginWebResource{
+				WebResource: resource,
+				PluginName:  clientName,
+			})
+		}
+	}
+	return result, nil
+}
+
+// PluginWebResources get list of web plugins
+func (m *Manager) PluginWebResourcesByType(ctx context.Context, mimeType string) ([]PluginWebResource, error) {
+	result := make([]PluginWebResource, 1)
+	for _, clientName := range m.store.ClientNames() {
+		service, err := m.store.GetService(clientName)
+		if err == nil {
+			continue
+		}
+		resources, err := service.GetResourcesByType(ctx, mimeType)
+		if err != nil {
+			continue
+		}
+		for _, resource := range resources {
+			result = append(result, PluginWebResource{
+				WebResource: resource,
+				PluginName:  clientName,
+			})
+		}
+	}
+	return result, nil
+}
+
+// PluginWebResource get the content of a paticular
+func (m *Manager) PluginWebResource(ctx context.Context, clientName string, path string) (*WebResourceContent, error) {
+	service, err := m.store.GetService(clientName)
+	if err != nil {
+		return nil, err
+	}
+	return service.GetResource(ctx, path)
 }
 
 // Start starts all plugins.

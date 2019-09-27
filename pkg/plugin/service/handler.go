@@ -30,12 +30,7 @@ type Handler struct {
 	dashboardClient  Dashboard
 	router           *Router
 
-	webResources []webResourceContent
-}
-
-type webResourceContent struct {
-	plugin.WebResource
-	content []byte
+	webResources []plugin.WebResourceContent
 }
 
 var _ plugin.Service = (*Handler)(nil)
@@ -164,11 +159,11 @@ func (p *Handler) AddAsset(path string, content []byte) error {
 	defer p.mu.Unlock()
 
 	if p.webResources == nil {
-		p.webResources = make([]webResourceContent, 1)
+		p.webResources = make([]plugin.WebResourceContent, 1)
 	}
 
-	resource := webResourceContent{
-		content: content,
+	resource := plugin.WebResourceContent{
+		Content: content,
 		WebResource: plugin.WebResource{
 			Path:     path,
 			MimeType: mime.TypeByExtension(filepath.Ext(path)),
@@ -200,10 +195,10 @@ func (p *Handler) GetResourcesByType(ctx context.Context, mimeType string) ([]pl
 }
 
 // GetResource Get the resource of the path specified
-func (p *Handler) GetResource(ctx context.Context, path string) ([]byte, error) {
+func (p *Handler) GetResource(ctx context.Context, path string) (*plugin.WebResourceContent, error) {
 	for _, resource := range p.webResources {
 		if resource.WebResource.Path == path {
-			return resource.content, nil
+			return &resource, nil
 		}
 	}
 	return nil, fmt.Errorf("File path not found in plugin: %s", path)

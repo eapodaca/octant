@@ -89,6 +89,11 @@ type WebResource struct {
 	MimeType string
 }
 
+type WebResourceContent struct {
+	WebResource
+	Content []byte
+}
+
 // Service is the interface that is exposed as a plugin. The plugin is required to implement this
 // interface.
 type Service interface {
@@ -99,7 +104,7 @@ type Service interface {
 	HandleAction(ctx context.Context, payload action.Payload) error
 	GetResources(ctx context.Context) ([]WebResource, error)
 	GetResourcesByType(ctx context.Context, mimeType string) ([]WebResource, error)
-	GetResource(ctx context.Context, path string) ([]byte, error)
+	GetResource(ctx context.Context, path string) (*WebResourceContent, error)
 }
 
 // ModuleService is the interface that is exposed as a plugin as a module. The plugin is required to implement this

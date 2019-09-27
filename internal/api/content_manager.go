@@ -209,7 +209,6 @@ func (cm *ContentManager) RequestPluginWebResources(ctx context.Context, state o
 		Data: map[string]interface{}{
 			"resources": resources,
 		},
-		Err: nil,
 	}
 
 	s.Send(ev)
