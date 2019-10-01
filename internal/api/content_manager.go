@@ -21,9 +21,8 @@ import (
 )
 
 const (
-	RequestSetContentPath     = "setContentPath"
-	RequestSetNamespace       = "setNamespace"
-	RequestPluginWebResources = "getPluginResources"
+	RequestSetContentPath = "setContentPath"
+	RequestSetNamespace   = "setNamespace"
 )
 
 // ContentManagerOption is an option for configuring ContentManager.
@@ -151,10 +150,6 @@ func (cm *ContentManager) Handlers() []octant.ClientRequestHandler {
 			RequestType: RequestSetNamespace,
 			Handler:     cm.SetNamespace,
 		},
-		{
-			RequestType: RequestPluginWebResources,
-			Handler:     cm.RequestPluginWebResources,
-		},
 	}
 }
 
@@ -195,25 +190,6 @@ func (cm *ContentManager) SetContentPath(ctx context.Context, state octant.State
 	}
 
 	state.SetContentPath(contentPath)
-	return nil
-}
-
-// RequestPluginWebResources will tell the client about web resources that plugins provide
-func (cm *ContentManager) RequestPluginWebResources(ctx context.Context, state octant.State, payload action.Payload, s octant.OctantClient) error {
-	css := state.ListPluginResources(ctx, "text/css")
-	js := state.ListPluginResources(ctx, "application/js")
-
-	ev := octant.Event{
-		Type: RequestPluginWebResources,
-		Data: map[string]interface{}{
-			"resources": map[string]interface{}{
-				"css": css,
-				"js":  js,
-			},
-		},
-	}
-
-	s.Send(ev)
 	return nil
 }
 

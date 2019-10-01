@@ -43,6 +43,8 @@ const (
 
 	// EventTypeAlert is an alert event.
 	EventTypeAlert EventType = "alert"
+
+	EventTypeWebResources EventType = "webResources"
 )
 
 // Event is an event for the dash frontend.

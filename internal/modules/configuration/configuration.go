@@ -33,8 +33,9 @@ type Options struct {
 type Configuration struct {
 	Options
 
-	pathMatcher          *describer.PathMatcher
-	kubeContextGenerator *event.ContextsGenerator
+	pathMatcher              *describer.PathMatcher
+	kubeContextGenerator     *event.ContextsGenerator
+	pluginResourcesGenerator *event.PluginResourceGenerator
 }
 
 var _ module.Module = (*Configuration)(nil)
@@ -47,9 +48,10 @@ func New(ctx context.Context, options Options) *Configuration {
 	}
 
 	return &Configuration{
-		Options:              options,
-		pathMatcher:          pm,
-		kubeContextGenerator: event.NewContextsGenerator(options.DashConfig),
+		Options:                  options,
+		pathMatcher:              pm,
+		kubeContextGenerator:     event.NewContextsGenerator(options.DashConfig),
+		pluginResourcesGenerator: event.NewPluginResourcesGenerator(options.DashConfig),
 	}
 }
 
@@ -144,6 +146,7 @@ func (c Configuration) ResetCRDs(ctx context.Context) error {
 func (c Configuration) Generators() []octant.Generator {
 	return []octant.Generator{
 		c.kubeContextGenerator,
+		c.pluginResourcesGenerator,
 	}
 }
 
