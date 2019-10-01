@@ -283,7 +283,7 @@ type PluginWebResource struct {
 
 // PluginWebResources get list of web plugins
 func (m *Manager) PluginWebResources(ctx context.Context) ([]PluginWebResource, error) {
-	result := make([]PluginWebResource, 1)
+	result := make([]PluginWebResource, 0)
 	for _, clientName := range m.store.ClientNames() {
 		service, err := m.store.GetService(clientName)
 		if err == nil {
@@ -305,7 +305,7 @@ func (m *Manager) PluginWebResources(ctx context.Context) ([]PluginWebResource, 
 
 // PluginWebResources get list of web plugins
 func (m *Manager) PluginWebResourcesByType(ctx context.Context, mimeType string) ([]PluginWebResource, error) {
-	result := make([]PluginWebResource, 1)
+	result := make([]PluginWebResource, 0)
 	for _, clientName := range m.store.ClientNames() {
 		service, err := m.store.GetService(clientName)
 		if err == nil {
