@@ -43,6 +43,7 @@ func main() {
 		service.WithPrinter(handlePrint),
 		service.WithTabPrinter(handleTab),
 		service.WithNavigation(handleNavigation, initRoutes),
+		service.WithResources(AddResources),
 	}
 
 	// Use the plugin service helper to register this plugin.
@@ -54,6 +55,12 @@ func main() {
 	// The plugin can log and the log messages will show up in Octant.
 	log.Printf("octant-sample-plugin is starting")
 	p.Serve()
+}
+
+// AddResources we want to add out assets!
+func AddResources(addAsset service.AddAsset) error {
+	err := addAsset("/test.css", []byte("body { color: green !inportant; }"))
+	return err
 }
 
 // handleTab is called when Octant wants to print a tab for an object.

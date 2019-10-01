@@ -61,6 +61,13 @@ func WithNavigation(fn HandlerNavigationFunc, routerInit HandlerInitRoutesFunc) 
 	}
 }
 
+// WithResources configure web resources that this plugin can provide
+func WithResources(fn HandlerInitResources) PluginOption {
+	return func(p *Plugin) {
+		p.pluginHandler.HandlerFuncs.InitResources = fn
+	}
+}
+
 // Plugin is a plugin service helper.
 type Plugin struct {
 	pluginHandler *Handler
@@ -89,6 +96,10 @@ func Register(name, description string, capabilities *plugin.Capabilities, optio
 
 	if p.pluginHandler.InitRoutes != nil {
 		p.pluginHandler.InitRoutes(router)
+	}
+
+	if p.pluginHandler.InitResources != nil {
+		p.pluginHandler.InitResources(p.pluginHandler.AddAsset)
 	}
 
 	if err := p.Validate(); err != nil {
@@ -172,19 +183,24 @@ type NavigationRequest struct {
 	DashboardClient Dashboard
 }
 
+// AddAsset func used to add assets
+type AddAsset func(path string, content []byte) error
+
 type HandlerPrinterFunc func(request *PrintRequest) (plugin.PrintResponse, error)
 type HandlerTabPrintFunc func(request *PrintRequest) (plugin.TabResponse, error)
 type HandlerObjectStatusFunc func(request *PrintRequest) (plugin.ObjectStatusResponse, error)
 type HandlerActionFunc func(request *ActionRequest) error
 type HandlerNavigationFunc func(request *NavigationRequest) (navigation.Navigation, error)
 type HandlerInitRoutesFunc func(router *Router)
+type HandlerInitResources func(fn AddAsset) error
 
 // HandlerFuncs are functions for configuring a plugin.
 type HandlerFuncs struct {
-	Print        HandlerPrinterFunc
-	PrintTab     HandlerTabPrintFunc
-	ObjectStatus HandlerObjectStatusFunc
-	HandleAction HandlerActionFunc
-	Navigation   HandlerNavigationFunc
-	InitRoutes   HandlerInitRoutesFunc
+	Print         HandlerPrinterFunc
+	PrintTab      HandlerTabPrintFunc
+	ObjectStatus  HandlerObjectStatusFunc
+	HandleAction  HandlerActionFunc
+	Navigation    HandlerNavigationFunc
+	InitRoutes    HandlerInitRoutesFunc
+	InitResources HandlerInitResources
 }
