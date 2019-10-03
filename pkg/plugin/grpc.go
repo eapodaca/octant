@@ -302,8 +302,8 @@ func (c *GRPCClient) GetResources(ctx context.Context) ([]WebResource, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make([]WebResource, len(resp.WebResourcs))
-	for _, res := range resp.WebResourcs {
+	result := make([]WebResource, len(resp.WebResources))
+	for _, res := range resp.WebResources {
 		newRes := WebResource{
 			Path:     res.Path,
 			MimeType: res.MimeType,
@@ -322,8 +322,8 @@ func (c *GRPCClient) GetResourcesByType(ctx context.Context, mimeType string) ([
 	if err != nil {
 		return nil, err
 	}
-	result := make([]WebResource, len(resp.WebResourcs))
-	for _, res := range resp.WebResourcs {
+	result := make([]WebResource, len(resp.WebResources))
+	for _, res := range resp.WebResources {
 		newRes := WebResource{
 			Path:     res.Path,
 			MimeType: res.MimeType,
@@ -557,14 +557,14 @@ func (s *GRPCServer) GetResources(ctx context.Context, req *dashboard.ResourcesR
 	}
 
 	result := dashboard.ResourcesResponce{
-		WebResourcs: make([]*dashboard.WebResource, len(res)),
+		WebResources: make([]*dashboard.WebResource, len(res)),
 	}
 	for _, resource := range res {
 		newResource := dashboard.WebResource{
 			Path:     resource.Path,
 			MimeType: resource.MimeType,
 		}
-		result.WebResourcs = append(result.WebResourcs, &newResource)
+		result.WebResources = append(result.WebResources, &newResource)
 	}
 	return &result, nil
 }
@@ -577,14 +577,14 @@ func (s *GRPCServer) GetResourcesByType(ctx context.Context, req *dashboard.Reso
 	}
 
 	result := dashboard.ResourcesResponce{
-		WebResourcs: make([]*dashboard.WebResource, len(res)),
+		WebResources: make([]*dashboard.WebResource, len(res)),
 	}
 	for _, resource := range res {
 		newResource := dashboard.WebResource{
 			Path:     resource.Path,
 			MimeType: resource.MimeType,
 		}
-		result.WebResourcs = append(result.WebResourcs, &newResource)
+		result.WebResources = append(result.WebResources, &newResource)
 	}
 	return &result, nil
 }

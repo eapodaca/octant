@@ -87,12 +87,6 @@ message WatchRequest {
     bytes object = 2;
 }
 
-/*
-	GetResources(ctx context.Context) ([]WebResource, error)
-	GetResourcesByType(ctx context.Context, mimeType string) ([]WebResource, error)
-	GetResource(ctx context.Context, path string) ([]byte, error)
-*/
-
 message WebResource {
     string Path = 1;
     string MimeType = 2;
@@ -111,7 +105,7 @@ message ResourceRequest {
 }
 
 message ResourcesResponce {
-    repeated WebResource webResourcs = 1;
+    repeated WebResource webResources = 1;
 }
 
 message ResourceResponce {
